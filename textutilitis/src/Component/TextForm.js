@@ -1,65 +1,77 @@
-import React,{useState} from 'react'
-import PropTypes from 'prop-types'
-export default function TextForm(prop){
-    const [text,setText] = useState('Enter text Here');
-    // setText("Ganesh Mane");//--> Value of text is Changed to this.
-    const handleUpClick = () =>{
-        // console.log("Uppercase was clicked");
-        // setText("You Have Clicked on HandleUpClick");
-        setText(text.toUpperCase());
-        prop.showAlert("Data converted to UpperCase","success");
-    }
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
-    const handleOnChange = (event) =>{
-        // console.log("Handle On Changed");
-        setText(event.target.value);
-        //Writable File
-    }
-    const handlelowerClick = () =>{
-        // console.log("LowerCase clicked");
-        setText(text.toLowerCase());
-        prop.showAlert("Data converted to LowerCase","success");
-    }
+export default function TextForm(props) {
+  const [text, setText] = useState("");
 
-    const handleClearClick = () =>{
-        let newText = "";
-        setText(newText);
-        prop.showAlert("Data has been Cleared","danger");
-    }
+  const handleUpClick = () => {
+    setText(text.toUpperCase());
+    props.showAlert("Data converted to UpperCase", "success");
+  };
 
-    let myStyle = {
-        color : 'black', 
-        fontWeight : 'bold',
-        fontFamily : 'times new roman',
-        fontSize   : '20px'
-    }
-    return (
-    <div className={`bg-${prop.mode}`}>
-    <div className="container">
-    <h2 className='my-3' style={{ color: prop.mode === 'light' ? 'black' : 'white'}}>{prop.heading}</h2>
-    <div className="mb-3">
-    <textarea className="form-control" onChange={handleOnChange} id="exampleFormControlTextarea1" rows="8" value={text}  style={{
-                        backgroundColor: prop.mode === 'light' ? 'white' : 'black', // Set background based on mode
-                        color: prop.mode == 'light' ? 'black' : 'white', // Make the text inside the textarea white
-                        borderColor: prop.mode === 'light' ? 'black' : 'white' // Optional: Set border color for dark mode
-                    }}></textarea>
-    </div>
-    <button className="btn btn-primary mx-2" onClick={handleUpClick}>Convert to uppercase</button>
-    <button className="btn btn-warning mx-2" onClick={handlelowerClick}>Convert to lowercase</button>
-    <button className="btn btn-primary mx-2" onClick={handleClearClick}>Clear Data</button>
-    </div>
-    <div className="container" style={{color: prop.mode === 'light' ? 'black' : 'white'}}>
-        <h2 className="my-3" ><strong>Your Text Summery</strong></h2>
-        <p>{text.split(/\s+/).length} words and {text.length} Characters</p>
-        <p>{0.008*text.split(/\s+/).filter(Boolean).length} Minutes required to read.</p>
+  const handleOnChange = (event) => {
+    setText(event.target.value);
+  };
+
+  const handleLowerClick = () => {
+    setText(text.toLowerCase());
+    props.showAlert("Data converted to LowerCase", "success");
+  };
+
+  const handleClearClick = () => {
+    setText("");
+    props.showAlert("Data has been cleared", "danger");
+  };
+
+  const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+
+  return (
+    <div className={`bg-${props.mode}`} style={{ minHeight: "100vh", padding: "20px" }}>
+      <div className="container">
+        <h2 className="my-3" style={{ color: props.mode === "light" ? "black" : "white" }}>
+          {props.heading}
+        </h2>
+        <div className="mb-3">
+          <textarea
+            className="form-control"
+            onChange={handleOnChange}
+            id="exampleFormControlTextarea1"
+            rows="8"
+            value={text}
+            style={{
+              backgroundColor: props.mode === "light" ? "white" : "black",
+              color: props.mode === "light" ? "black" : "white",
+              borderColor: props.mode === "light" ? "black" : "white",
+            }}
+          ></textarea>
+        </div>
+        <button className="btn btn-primary mx-2" onClick={handleUpClick} disabled={text.trim() === ""}>
+          Convert to Uppercase
+        </button>
+        <button className="btn btn-warning mx-2" onClick={handleLowerClick} disabled={text.trim() === ""}>
+          Convert to Lowercase
+        </button>
+        <button className="btn btn-primary mx-2" onClick={handleClearClick} disabled={text.trim() === ""}>
+          Clear Data
+        </button>
+      </div>
+      <div className="container" style={{ color: props.mode === "light" ? "black" : "white" }}>
+        <h2 className="my-3"><strong>Your Text Summary</strong></h2>
+        <p>{wordCount} words and {text.length} characters</p>
+        <p>{0.008 * wordCount} Minutes required to read.</p>
         <h2 className="my-3"><strong>Preview</strong></h2>
-        <p>{text.length > 0 ? text : "Enter Text in Textarea to preview it."}</p>
+        <p>{text.length > 0 ? text : "Nothing to preview"}</p>
+      </div>
     </div>
-    </div>
-    )
+  );
 }
 
-TextForm.propTypes = {title : PropTypes.string};
-TextForm.defaultProps ={
-        title : "Text Analyzer"
-}
+TextForm.propTypes = {
+  heading: PropTypes.string.isRequired,
+  mode: PropTypes.string.isRequired,
+  showAlert: PropTypes.func.isRequired,
+};
+
+TextForm.defaultProps = {
+  heading: "Text Analyzer",
+};

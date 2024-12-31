@@ -1,4 +1,6 @@
+
 {
+  "homepage": "https://Ganesh-PC018.github.io/React-TextUtils",
   "name": "textutilitis",
   "version": "0.1.0",
   "private": true,
@@ -10,6 +12,8 @@
     "react-scripts": "^3.0.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+   "deploy": "gh-pages -d build",
     "start": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
     "build": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts build"
   },
